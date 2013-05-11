@@ -57,6 +57,10 @@ NSString *MAStringWithFormat(NSString *format, ...)
                 int value = va_arg(arguments, int);
                 [self writeInt: value];
             }
+            else if(next == '%')
+            {
+                [self write: '%'];
+            }
         }
     }
     
