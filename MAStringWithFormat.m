@@ -67,9 +67,25 @@ NSString *MAStringWithFormat(NSString *format, ...)
     return _output;
 }
 
-- (void)writeInt: (int)value
+- (void)writeInt: (long long)value
 {
-    int cursor = 1;
+    if(value < 0)
+    {
+        [self write: '-'];
+        if(value == LLONG_MIN)
+        {
+            [self writeUnsignedLongLong: 1ULL << (sizeof(long long) * CHAR_BIT - 1)];
+            return;
+        }
+        else
+            value = -value;
+    }
+    [self writeUnsignedLongLong: value];
+}
+
+- (void)writeUnsignedLongLong: (unsigned long long)value
+{
+    unsigned long long cursor = 1;
     while(value / cursor >= 10)
         cursor *= 10;
     
