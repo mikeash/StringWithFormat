@@ -90,6 +90,11 @@ NSString *MAStringWithFormat(NSString *format, ...)
                     }
                 }
             }
+            else if(next == 'f')
+            {
+                double value = va_arg(arguments, double);
+                [self writeDouble: value];
+            }
             else if(next == '%')
             {
                 [self write: '%'];
@@ -128,6 +133,44 @@ NSString *MAStringWithFormat(NSString *format, ...)
         [self write: '0' + digit];
         value -= digit * cursor;
         cursor /= 10;
+    }
+}
+
+- (void)writeDouble: (double)value
+{
+    if(isinf(value) || isnan(value))
+    {
+        const char *str = isinf(value) ? "INFINITY" : "NaN";
+        while(*str)
+            [self write: *str++];
+        return;
+    }
+    
+    double intpart = trunc(value);
+    double fracpart = value - intpart;
+    
+    [self writeDoubleIntPart: intpart];
+    [self write: '.'];
+    [self writeDoubleFracPart: fracpart];
+}
+
+- (void)writeDoubleIntPart: (double)intpart
+{
+    [self write: '0'];
+}
+
+- (void)writeDoubleFracPart: (double)fracpart
+{
+    while(fracpart)
+    {
+        fracpart *= 2;
+        if(fracpart >= 1.0)
+        {
+            [self write: '1'];
+            fracpart -= 1.0;
+        }
+        else
+            [self write: '0'];
     }
 }
 

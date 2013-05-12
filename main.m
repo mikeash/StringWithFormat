@@ -37,5 +37,11 @@ int main(int argc, char **argv)
     TEST(sizeof(long) == 8 ? @"18446744073709551615" : @"4294967295", @"%lu", -1L);
     TEST(@"18446744073709551615", @"%llu", -1L);
     
+    TEST(@"INFINITY", @"%f", INFINITY);
+    TEST(@"NaN", @"%f", NAN);
+    TEST(@"1.0", @"%f", 1.0);
+    TEST(@"0.5", @"%f", 0.5);
+    TEST(@"1.5", @"%f", 1.5);
+    
     TEST(@"%", @"%%");
 }
