@@ -55,7 +55,25 @@ NSString *MAStringWithFormat(NSString *format, ...)
             if(next == 'd')
             {
                 int value = va_arg(arguments, int);
-                [self writeInt: value];
+                [self writeLongLong: value];
+            }
+            else if(next == 'l')
+            {
+                next = [self read];
+                if(next == 'd')
+                {
+                    long value = va_arg(arguments, long);
+                    [self writeLongLong: value];
+                }
+                else if(next == 'l')
+                {
+                    next = [self read];
+                    if(next == 'd')
+                    {
+                        long long value = va_arg(arguments, long long);
+                        [self writeLongLong: value];
+                    }
+                }
             }
             else if(next == '%')
             {
@@ -67,7 +85,7 @@ NSString *MAStringWithFormat(NSString *format, ...)
     return _output;
 }
 
-- (void)writeInt: (long long)value
+- (void)writeLongLong: (long long)value
 {
     if(value < 0)
     {

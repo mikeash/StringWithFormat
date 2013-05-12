@@ -18,11 +18,20 @@ int main(int argc, char **argv)
     } while(0)
     
     TEST(@"Abcd", @"Abcd");
+    
     TEST(@"AB 42 CD", @"AB %d CD", 42);
     TEST(@"0", @"%d", 0);
     TEST(@"2147483647", @"%d", 2147483647);
     TEST(@"123456789", @"%d%d%d%d%d%d%d%d%d", 1, 2, 3, 4, 5, 6, 7, 8, 9);
-    TEST(@"%", @"%%");
     TEST(@"-1", @"%d", -1);
     TEST(@"-2147483648", @"%d", INT_MIN);
+    
+    TEST(@"1", @"%ld", 1L);
+    TEST(sizeof(long) == 8 ? @"9223372036854775807" : @"2147483647", @"%ld", LONG_MAX);
+    TEST(@"-1", @"%ld", -1L);
+    TEST(@"1", @"%lld", 1LL);
+    TEST(@"9223372036854775807", @"%lld", LLONG_MAX);
+    TEST(@"-9223372036854775808", @"%lld", LLONG_MIN);
+    
+    TEST(@"%", @"%%");
 }
