@@ -57,6 +57,11 @@ NSString *MAStringWithFormat(NSString *format, ...)
                 int value = va_arg(arguments, int);
                 [self writeLongLong: value];
             }
+            else if(next == 'u')
+            {
+                unsigned value = va_arg(arguments, unsigned);
+                [self writeUnsignedLongLong: value];
+            }
             else if(next == 'l')
             {
                 next = [self read];
@@ -65,6 +70,11 @@ NSString *MAStringWithFormat(NSString *format, ...)
                     long value = va_arg(arguments, long);
                     [self writeLongLong: value];
                 }
+                else if(next == 'u')
+                {
+                    unsigned long value = va_arg(arguments, unsigned long);
+                    [self writeUnsignedLongLong: value];
+                }
                 else if(next == 'l')
                 {
                     next = [self read];
@@ -72,6 +82,11 @@ NSString *MAStringWithFormat(NSString *format, ...)
                     {
                         long long value = va_arg(arguments, long long);
                         [self writeLongLong: value];
+                    }
+                    else if(next == 'u')
+                    {
+                        unsigned long long value = va_arg(arguments, unsigned long long);
+                        [self writeUnsignedLongLong: value];
                     }
                 }
             }
