@@ -156,7 +156,20 @@ NSString *MAStringWithFormat(NSString *format, ...)
 
 - (void)writeDoubleIntPart: (double)intpart
 {
-    [self write: '0'];
+    unsigned long long total = 0;
+    unsigned long long currentBit = 1;
+    
+    while(intpart)
+    {
+        intpart /= 2;
+        if(fmod(intpart, 1.0))
+        {
+            total += currentBit;
+            intpart = trunc(intpart);
+        }
+    }
+    
+    [self writeUnsignedLongLong: total];
 }
 
 - (void)writeDoubleFracPart: (double)fracpart
