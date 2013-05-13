@@ -167,6 +167,7 @@ NSString *MAStringWithFormat(NSString *format, ...)
             total += currentBit;
             intpart = trunc(intpart);
         }
+        currentBit *= 2;
     }
     
     [self writeUnsignedLongLong: total];
