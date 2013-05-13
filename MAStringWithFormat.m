@@ -159,6 +159,10 @@ NSString *MAStringWithFormat(NSString *format, ...)
     unsigned long long total = 0;
     unsigned long long currentBit = 1;
     
+    unsigned long long maxValue = [self ullongMaxPowerOf10] / 10;
+    
+    unsigned surplusZeroes = 0;
+    
     while(intpart)
     {
         intpart /= 2;
@@ -168,17 +172,23 @@ NSString *MAStringWithFormat(NSString *format, ...)
             intpart = trunc(intpart);
         }
         currentBit *= 2;
+        if(currentBit > maxValue)
+        {
+            total /= 10;
+            currentBit = (currentBit + 5) / 10;
+            surplusZeroes++;
+        }
     }
     
     [self writeUnsignedLongLong: total];
+    for(unsigned i = 0; i < surplusZeroes; i++)
+        [self write: '0'];
 }
 
 - (void)writeDoubleFracPart: (double)fracpart
 {
     unsigned long long total = 0;
-    unsigned long long currentBit = 1;
-    while(ULLONG_MAX / currentBit >= 10)
-        currentBit *= 10;
+    unsigned long long currentBit = [self ullongMaxPowerOf10];
     
     while(fracpart)
     {
@@ -195,6 +205,14 @@ NSString *MAStringWithFormat(NSString *format, ...)
         total /= 10;
     
     [self writeUnsignedLongLong: total];
+}
+
+- (unsigned long long)ullongMaxPowerOf10
+{
+    unsigned long long result = 1;
+    while(ULLONG_MAX / result >= 10)
+        result *= 10;
+    return result;
 }
 
 - (int)read
