@@ -26,14 +26,15 @@ NSString *MAStringWithFormat(NSString *format, ...)
     NSUInteger _formatLength;
     NSUInteger _cursor;
     
-    NSMutableString *_output;
+    unichar *_outputBuffer;
+    NSUInteger _outputBufferCursor;
+    NSUInteger _outputBufferLength;
 }
 
 - (NSString *)format: (NSString *)format arguments: (va_list)arguments
 {
     _formatLength = [format length];
     CFStringInitInlineBuffer((__bridge CFStringRef)format, &_formatBuffer, CFRangeMake(0, _formatLength));
-    _output = [NSMutableString string];
     _cursor = 0;
     
     int c;
@@ -102,7 +103,9 @@ NSString *MAStringWithFormat(NSString *format, ...)
         }
     }
     
-    return _output;
+    NSString *output = [[NSString alloc] initWithCharactersNoCopy: _outputBuffer length: _outputBufferCursor freeWhenDone: YES];
+    _outputBuffer = NULL;
+    return output;
 }
 
 - (void)writeLongLong: (long long)value
@@ -233,7 +236,17 @@ NSString *MAStringWithFormat(NSString *format, ...)
 
 - (void)write: (unichar)c
 {
-    [_output appendFormat: @"%C", c];
+    if(_outputBufferCursor >= _outputBufferLength)
+    {
+        if(_outputBufferLength == 0)
+            _outputBufferLength = 64;
+        else
+            _outputBufferLength *= 2;
+        _outputBuffer = realloc(_outputBuffer, _outputBufferLength * sizeof(*_outputBuffer));
+    }
+    
+    _outputBuffer[_outputBufferCursor] = c;
+    _outputBufferCursor++;
 }
 
 @end
