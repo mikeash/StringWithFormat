@@ -189,6 +189,7 @@ NSString *MAStringWithFormat(NSString *format, ...)
 {
     unsigned long long total = 0;
     unsigned long long currentBit = [self ullongMaxPowerOf10];
+    unsigned long long shiftThreshold = [self ullongMaxPowerOf10] / 10;
     
     while(fracpart)
     {
@@ -198,6 +199,13 @@ NSString *MAStringWithFormat(NSString *format, ...)
         {
             total += currentBit;
             fracpart -= 1.0;
+        }
+        
+        if(currentBit <= shiftThreshold && total <= shiftThreshold)
+        {
+            [self write: '0'];
+            currentBit *= 10;
+            total *= 10;
         }
     }
     
