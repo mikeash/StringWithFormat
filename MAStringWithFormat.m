@@ -161,17 +161,26 @@ NSString *MAStringWithFormat(NSString *format, ...)
 
 - (void)writeDoubleFracPart: (double)fracpart
 {
+    unsigned long long total = 0;
+    unsigned long long currentBit = 1;
+    while(ULLONG_MAX / currentBit >= 10)
+        currentBit *= 10;
+    
     while(fracpart)
     {
+        currentBit /= 2;
         fracpart *= 2;
         if(fracpart >= 1.0)
         {
-            [self write: '1'];
+            total += currentBit;
             fracpart -= 1.0;
         }
-        else
-            [self write: '0'];
     }
+    
+    while(total != 0 && total % 10 == 0)
+        total /= 10;
+    
+    [self writeUnsignedLongLong: total];
 }
 
 - (int)read
