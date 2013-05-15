@@ -52,5 +52,9 @@ int main(int argc, char **argv)
     
     TEST(@"0.0000000000000000000000000000000000000000999999999999999907", @"%f", 1e-40);
     
+    TEST(@"hello", @"%s", "hello");
+    TEST(@"hello", @"%@", @"hello");
+    TEST(@"(\n    hello\n)", @"%@", @[ @"hello" ]);
+    
     TEST(@"%", @"%%");
 }

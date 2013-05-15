@@ -96,6 +96,24 @@ NSString *MAStringWithFormat(NSString *format, ...)
                 double value = va_arg(arguments, double);
                 [self writeDouble: value];
             }
+            else if(next == 's')
+            {
+                const char *value = va_arg(arguments, const char *);
+                while(*value)
+                    [self write: *value++];
+            }
+            else if(next == '@')
+            {
+                id value = va_arg(arguments, id);
+                NSString *description = [value description];
+                NSUInteger length = [description length];
+                
+                while(length > _outputBufferLength - _outputBufferCursor)
+                    [self doubleOutputBuffer];
+                
+                [description getCharacters: _outputBuffer + _outputBufferCursor range: NSMakeRange(0, length)];
+                _outputBufferCursor += length;
+            }
             else if(next == '%')
             {
                 [self write: '%'];
@@ -237,16 +255,19 @@ NSString *MAStringWithFormat(NSString *format, ...)
 - (void)write: (unichar)c
 {
     if(_outputBufferCursor >= _outputBufferLength)
-    {
-        if(_outputBufferLength == 0)
-            _outputBufferLength = 64;
-        else
-            _outputBufferLength *= 2;
-        _outputBuffer = realloc(_outputBuffer, _outputBufferLength * sizeof(*_outputBuffer));
-    }
+        [self doubleOutputBuffer];
     
     _outputBuffer[_outputBufferCursor] = c;
     _outputBufferCursor++;
+}
+
+- (void)doubleOutputBuffer
+{
+    if(_outputBufferLength == 0)
+        _outputBufferLength = 64;
+    else
+        _outputBufferLength *= 2;
+    _outputBuffer = realloc(_outputBuffer, _outputBufferLength * sizeof(*_outputBuffer));
 }
 
 @end
