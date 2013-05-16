@@ -121,6 +121,8 @@ NSString *MAStringWithFormat(NSString *format, ...)
     
     NSString *output = [[NSString alloc] initWithCharactersNoCopy: _outputBuffer length: _outputBufferCursor freeWhenDone: YES];
     _outputBuffer = NULL;
+    _outputBufferCursor = 0;
+    _outputBufferLength = 0;
     return output;
 }
 
