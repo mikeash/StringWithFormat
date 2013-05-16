@@ -20,8 +20,6 @@ NSString *MAStringWithFormat(NSString *format, ...)
 }
 
 @implementation MAStringFormatter {
-    va_list _arguments;
-    
     CFStringInlineBuffer _formatBuffer;
     NSUInteger _formatLength;
     NSUInteger _cursor;
