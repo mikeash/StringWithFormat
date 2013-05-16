@@ -57,4 +57,8 @@ int main(int argc, char **argv)
     TEST(@"(\n    hello\n)", @"%@", @[ @"hello" ]);
     
     TEST(@"%", @"%%");
+    
+    TEST(@"", @"%");
+    TEST(@"", @"%l");
+    TEST(@"", @"%ll");
 }

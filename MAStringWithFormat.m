@@ -49,11 +49,6 @@ NSString *MAStringWithFormat(NSString *format, ...)
         else
         {
             int next = [self read];
-            if(next < 0)
-            {
-                [self write: c];
-                break;
-            }
             
             if(next == 'd')
             {
