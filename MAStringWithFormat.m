@@ -35,6 +35,10 @@ NSString *MAStringWithFormat(NSString *format, ...)
     CFStringInitInlineBuffer((__bridge CFStringRef)format, &_formatBuffer, CFRangeMake(0, _formatLength));
     _cursor = 0;
     
+    _outputBuffer = NULL;
+    _outputBufferCursor = 0;
+    _outputBufferLength = 0;
+    
     int c;
     while((c = [self read]) >= 0)
     {
@@ -120,9 +124,6 @@ NSString *MAStringWithFormat(NSString *format, ...)
     }
     
     NSString *output = [[NSString alloc] initWithCharactersNoCopy: _outputBuffer length: _outputBufferCursor freeWhenDone: YES];
-    _outputBuffer = NULL;
-    _outputBufferCursor = 0;
-    _outputBufferLength = 0;
     return output;
 }
 
