@@ -192,7 +192,7 @@ NSString *MAStringWithFormat(NSString *format, ...)
         currentBit *= 2;
         if(currentBit > maxValue)
         {
-            total /= 10;
+            total = (total + 5) / 10;
             currentBit = (currentBit + 5) / 10;
             surplusZeroes++;
         }
