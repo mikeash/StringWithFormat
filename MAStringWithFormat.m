@@ -127,13 +127,7 @@ NSString *MAStringWithFormat(NSString *format, ...)
     if(value < 0)
     {
         [self write: '-'];
-        if(value == LLONG_MIN)
-        {
-            [self writeUnsignedLongLong: 1ULL << (sizeof(long long) * CHAR_BIT - 1)];
-            return;
-        }
-        else
-            value = -value;
+        value = -value;
     }
     [self writeUnsignedLongLong: value];
 }
