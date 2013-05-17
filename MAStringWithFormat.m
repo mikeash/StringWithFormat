@@ -124,12 +124,13 @@ NSString *MAStringWithFormat(NSString *format, ...)
 
 - (void)writeLongLong: (long long)value
 {
+    unsigned long long unsignedValue = value;
     if(value < 0)
     {
         [self write: '-'];
-        value = -value;
+        unsignedValue = -unsignedValue;
     }
-    [self writeUnsignedLongLong: value];
+    [self writeUnsignedLongLong: unsignedValue];
 }
 
 - (void)writeUnsignedLongLong: (unsigned long long)value
