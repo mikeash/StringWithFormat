@@ -158,6 +158,12 @@ NSString *MAStringWithFormat(NSString *format, ...)
         return;
     }
     
+    if(value < 0.0)
+    {
+        [self write: '-'];
+        value = -value;
+    }
+    
     double intpart = trunc(value);
     double fracpart = value - intpart;
     
