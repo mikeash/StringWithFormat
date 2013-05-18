@@ -38,6 +38,7 @@ int main(int argc, char **argv)
     TEST(@"18446744073709551615", @"%llu", -1L);
     
     TEST(@"INFINITY", @"%f", INFINITY);
+    TEST(@"-INFINITY", @"%f", -INFINITY);
     TEST(@"NaN", @"%f", NAN);
     TEST(@"1.0", @"%f", 1.0);
     TEST(@"0.5", @"%f", 0.5);

@@ -150,18 +150,18 @@ NSString *MAStringWithFormat(NSString *format, ...)
 
 - (void)writeDouble: (double)value
 {
+    if(value < 0.0)
+    {
+        [self write: '-'];
+        value = -value;
+    }
+    
     if(isinf(value) || isnan(value))
     {
         const char *str = isinf(value) ? "INFINITY" : "NaN";
         while(*str)
             [self write: *str++];
         return;
-    }
-    
-    if(value < 0.0)
-    {
-        [self write: '-'];
-        value = -value;
     }
     
     double intpart = trunc(value);
