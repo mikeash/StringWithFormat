@@ -5,6 +5,24 @@
 #import "MAStringWithFormat.h"
 
 
+@interface NSString (ToyXMLEscaping)
+- (NSString*)escapeForXML;
+@end
+
+@implementation NSString (ToyXMLEscaping)
+
+- (NSString*)escapeForXML
+{
+    NSString *ret = [self description];
+    ret = [ret stringByReplacingOccurrencesOfString:@"&" withString:@"&amp;"];
+    ret = [ret stringByReplacingOccurrencesOfString:@"<" withString:@"&lt;"];
+    ret = [ret stringByReplacingOccurrencesOfString:@">" withString:@"&gt;"];
+    ret = [ret stringByReplacingOccurrencesOfString:@"\"" withString:@"&quot;"];
+    return ret;
+}
+
+@end
+
 int main(int argc, char **argv)
 {
     #define TEST(expected, ...) do { \
@@ -64,4 +82,8 @@ int main(int argc, char **argv)
     TEST(@"", @"%");
     TEST(@"", @"%l");
     TEST(@"", @"%ll");
+    NSString *toEscape = @"<Hello & World>!";
+    TEST(@"<bad><html><Hello & World>!</html></bad>", @"<bad><html>%@</html></bad>", toEscape);
+    MAStringSetCustomObjectFormatter(@selector(escapeForXML));
+    TEST(@"<bad><html>&lt;Hello &amp; World&gt;!</html></bad>", @"<bad><html>%@</html></bad>", toEscape);
 }
