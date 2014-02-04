@@ -1,0 +1,16 @@
+*.diff
+*.mode1v3
+*.orig
+*.orig
+*.pbxuser
+*.perspective
+*.perspectivev3
+*.rej
+*.swp
+.DS_Store
+project.xcworkspace/
+tags
+xcuserdata/
+
+# Full paths.
+/test
