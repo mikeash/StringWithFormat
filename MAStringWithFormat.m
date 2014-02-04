@@ -1,5 +1,7 @@
 #import "MAStringWithFormat.h"
 
+static SEL customObjectFormatter;
+
 @interface MAStringFormatter : NSObject
 
 - (NSString *)format: (NSString *)format arguments: (va_list)arguments;
@@ -103,6 +105,8 @@ NSString *MAStringWithFormat(NSString *format, ...)
             {
                 id value = va_arg(arguments, id);
                 NSString *description = [value description];
+                if (customObjectFormatter && [description respondsToSelector:customObjectFormatter])
+                    description = [description performSelector:customObjectFormatter];
                 NSUInteger length = [description length];
                 
                 while(length > _outputBufferLength - _outputBufferCursor)
@@ -265,6 +269,16 @@ NSString *MAStringWithFormat(NSString *format, ...)
     else
         _outputBufferLength *= 2;
     _outputBuffer = realloc(_outputBuffer, _outputBufferLength * sizeof(*_outputBuffer));
+}
+
+// Sets a special selector to format objects.
+//
+// If the object to be formatted responds to the selector, which is presumed to
+// return an NSString, it will be called, allowing to provide a different
+// version than the one provide by the description selector.
+void MAStringSetCustomObjectFormatter(SEL action)
+{
+    customObjectFormatter = action;
 }
 
 @end
